@@ -1,6 +1,9 @@
 package com.usermanagement.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,25 +20,25 @@ public class UsersService {
 	
 	@Autowired
 	private RoleRepsoitory roleRepository;
-
-	public Users addUser(Users user) {
-		return userRepository.save(user);
+	public Users createUser(Users user,Set<String> roleNames) {
+    	Set<Roles> roles=roleNames.stream()
+    			         .map(roleRepository::findByRoleName)
+    			         .filter(Optional::isPresent)
+    			         .map(Optional::get)
+    			         .collect(Collectors.toSet());
+    	   user.setRoles(roles);
+    	   return userRepository.save(user);
+    }
+	public void deleteUser(int id) {
+		roleRepository.deleteById(id);
 		
-	}
-
-	public List<Users> getUser() {
-		
-	  return userRepository.findAll();
 	}
 	
-	/*public Users linkUserWithRoles(int userId, List<Integer> roleId) {
-		
-		Users user=userRepository.findById(userId).orElseThrow(()->new RuntimeException("user not found"));
-		List<Roles> role=roleRepository.findAllById(roleId);
-		
-		return userRepository.save(user);
-		
-	}*/
+	public List<Users> getUserByRole(String roleName){
+		return userRepository.findByRoles_RoleName(roleName);
+	}
+    
+	
 	
 	
 

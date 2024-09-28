@@ -1,7 +1,7 @@
 package com.usermanagement.model;
 
 
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Users {
@@ -21,16 +20,16 @@ public class Users {
 	private String userName;
 	private String userPassword;
 	private String userEmail;
-	@ManyToMany(mappedBy = "users")
+	@ManyToMany
 	@JoinTable(name="user_roles",
 	             joinColumns = @JoinColumn(name="user_id"),
 	             inverseJoinColumns = @JoinColumn(name="role_id"))
-	private List<Roles> roles;
+	private Set<Roles> roles;
 	public Users() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Users(int userId, String userName, String userPassword, String userEmail, List<Roles> roles) {
+	public Users(int userId, String userName, String userPassword, String userEmail, Set<Roles> roles) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -56,10 +55,10 @@ public class Users {
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
-	public List<Roles> getRoles() {
+	public Set<Roles> getRoles() {
 		return roles;
 	}
-	public void setRoles(List<Roles> roles) {
+	public void setRoles(Set<Roles> roles) {
 		this.roles = roles;
 	}
 	public int getUserId() {
