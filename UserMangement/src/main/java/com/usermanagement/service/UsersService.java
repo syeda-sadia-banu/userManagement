@@ -38,12 +38,16 @@ public class UsersService {
 		return userRepository.findByRoles_RoleName(roleName);
 	}
     
-	
-	
-	
-
-	
-
+	public Users updateUser(int id,Users updatedUser) {
+		return userRepository.findById(id)
+				.map(user->
+				{
+					user.setUserName(updatedUser.getUserName());
+					user.setUserEmail(updatedUser.getUserEmail());
+					user.setUserPassword(updatedUser.getUserPassword());
+					return userRepository.save(user);
+				}).orElseThrow(()->new RuntimeException("user not found"));
+	}
 	 
 
 }
